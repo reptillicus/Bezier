@@ -1,9 +1,13 @@
-from matplotlib import pylab
+from matplotlib import pyplot as plt
 import numpy as np
 from scipy.misc import comb
 
 def bernstein_poly(i, n, t):
-    return comb(n, i) * t**i * (1 - t)**n-i
+    """
+     The Bernstein polynomial of n, i as a function of t
+    """
+
+    return comb(n, i) * ( t**(n-i) ) * (1 - t)**i
 
 
 
@@ -23,7 +27,35 @@ def bezier_curve(points, nTimes=1000):
     """
 
     nPoints = len(points)
+    xPoints = np.array([p[0] for p in points])
+    yPoints = np.array([p[1] for p in points])
+
     t = np.linspace(0.0, 1.0, nTimes)
+
+    polynomial_array = np.array([ bernstein_poly(i, nPoints, t) for i in range(0, nPoints)   ])
+
+    print polynomial_array[1]
+ 
+    xvals = np.dot(xPoints[::-1], polynomial_array)
+    yvals = np.dot(yPoints[::-1], polynomial_array)
+
+    return xvals, yvals
+
+
+
+if __name__ == "__main__":
+    points = [[70, 250],
+              [120,160], 
+              [220, 260]]
+    xpoints = [p[0] for p in points]
+    ypoints = [p[1] for p in points]
+
+    xvals, yvals = bezier_curve(points, nTimes=100)
+    plt.plot(xvals, yvals)
+    plt.plot(xpoints, ypoints, "ro")
+    plt.show()
+
+
 
 
 
