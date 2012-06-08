@@ -1,4 +1,3 @@
-from matplotlib import pyplot as plt
 import numpy as np
 from scipy.misc import comb
 
@@ -32,27 +31,30 @@ def bezier_curve(points, nTimes=1000):
 
     t = np.linspace(0.0, 1.0, nTimes)
 
-    polynomial_array = np.array([ bernstein_poly(i, nPoints, t) for i in range(0, nPoints)   ])
+    polynomial_array = np.array([ bernstein_poly(i, nPoints-1, t) for i in range(0, nPoints)   ])
 
-    print polynomial_array[1]
- 
-    xvals = np.dot(xPoints[::-1], polynomial_array)
-    yvals = np.dot(yPoints[::-1], polynomial_array)
+    xvals = np.dot(xPoints, polynomial_array)
+    yvals = np.dot(yPoints, polynomial_array)
 
     return xvals, yvals
 
 
 
 if __name__ == "__main__":
-    points = [[70, 250],
-              [120,160], 
-              [220, 260]]
+    from matplotlib import pyplot as plt
+
+    nPoints = 4
+    points = np.random.rand(nPoints,2)*200
     xpoints = [p[0] for p in points]
     ypoints = [p[1] for p in points]
 
-    xvals, yvals = bezier_curve(points, nTimes=100)
+    xvals, yvals = bezier_curve(points, nTimes=1000)
     plt.plot(xvals, yvals)
     plt.plot(xpoints, ypoints, "ro")
+    for nr in range(len(points)):
+        plt.text(points[nr][0], points[nr][1], nr)
+
+
     plt.show()
 
 
